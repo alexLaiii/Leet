@@ -1,3 +1,12 @@
+##
+Initialize two pointers, left and right.
+Use binary search to narrow down the region containing the minimum.
+If nums[mid] > nums[right], the minimum lies to the right.
+Otherwise, it lies to the left or could be the mid itself.
+The loop ends when left == right, pointing to the minimum.
+This is a clean and optimal binary search pattern that's highly valuable in technical interviews.
+##
+
 class Solution(object):
     def findMin(self, nums):
         """
