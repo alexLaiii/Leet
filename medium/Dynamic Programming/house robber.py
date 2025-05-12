@@ -21,3 +21,21 @@ class Solution(object):
                 prev_rob = temp
                 
             return curr_rob
+
+
+"""
+Clean up version, same idea
+"""
+class Solution(object):
+    def rob(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+
+        if(len(nums) <= 1): return nums[0]  
+        else:          
+            prev_rob, max_rob = 0,0
+            for i in range(len(nums)):
+                max_rob, prev_rob = max(nums[i] + prev_rob, max_rob), max_rob
+        return max_rob
