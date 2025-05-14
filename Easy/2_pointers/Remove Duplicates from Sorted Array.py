@@ -3,6 +3,9 @@ Intuition
 Two pointer method, one keep track of the unqiue element, one keep track of the looping element, if the unique element is same as the looping element, ignore that element and continue the loop, since we only care about the first j element in the array, so this method works
 i is used to keep track of the looping elements
 j is used to keep track of the unique element
+Bascially we can think of 
+i as a Left pointer
+j as a Right pointer
 
 Time Complexity: O(n)
 Space Complexity: O(1)
