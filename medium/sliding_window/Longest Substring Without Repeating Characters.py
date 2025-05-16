@@ -36,3 +36,30 @@ class Solution(object):
                 longest = map[s[i]] - cutoff
                 
         return max(longest,prev_long)
+
+
+""" Version 2 but same idea """
+
+class Solution(object):
+    def lengthOfLongestSubstring(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        maps = {}
+        count,max_count, i= 0,0, 0
+        for j in range(len(s)):
+            if s[j] not in maps:
+                maps[s[j]] = j
+                count += 1
+            else:
+                if maps[s[j]] >= i:
+                    i = maps[s[j]] + 1
+                count = j - i + 1
+                maps[s[j]] = j
+            max_count = max(count,max_count)
+
+
+
+        return max_count
+            
