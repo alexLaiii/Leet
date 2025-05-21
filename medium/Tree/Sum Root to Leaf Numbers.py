@@ -8,8 +8,10 @@ DFS alogorithm:
 4. reursively doing this process, so every subtree's sum is returned to the root
 5. Therefore, the top root will return the sum of both subtree on the left and subtree on the right
 Side Note:
+Since the problems state: "You are given the root of a binary tree containing digits from 0 to 9 only."
 I times 10 to nums here, so 4->9->5 will become 495
 Since 4 * 10 + 9 = 49, and 49 * 10 + 5 = 495, which match the problem's requirements 
+this only works for this problrm as it specify every node value is between 0-9
 """
 
 
