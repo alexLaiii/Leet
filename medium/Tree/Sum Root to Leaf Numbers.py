@@ -1,12 +1,15 @@
 """
 Classy Tree traversal problem:
 Intuition: 
-First create an global array to store all the number of all route
-1. traverse to the left most sub treee first, if arrived leaf node, append the nnumber to the global array
-2. left sub tree, finished, traverse to the right node, same logic
-3. call the helper function recursively until all the subtree are traversed
-4. loopthrough the global array and add all the numbers to sums
-5. return sums
+DFS alogorithm:
+1. traverse to the left most node, during the traversel add each node value to nums and pass it to the next node
+2. By doing that to both left side and right side, so I can get the return value from both left and right side.
+3. add the left Sum and right Sum together, return it to the root, so each sum of the subtree is being track
+4. reursively doing this process, so every subtree's sum is returned to the root
+5. Therefore, the top root will return the sum of both subtree on the left and subtree on the right
+Side Note:
+I times 10 to nums here, so 4->9->5 will become 495
+Since 4 * 10 + 9 = 49, and 49 * 10 + 5 = 495, which match the problem's requirements 
 """
 
 
@@ -19,28 +22,29 @@ First create an global array to store all the number of all route
 #         self.right = right
 class Solution(object):
     def sumNumbers(self, root):
-        nums, sums = [], 0
-        
-        def sumNumbersHelper(root, nums_str):
+        def sumNumbersHelper(root, nums):
+
             if not root:
                 return 0
-
-            # Since string is immutable object in python, the string modification inside this fucntion will not 
-            # affect the nums_str outside, so I don't need to do "nums_str = nums_str[:-1]" (aka pop the last 
-            # value to backtrack) like an array, since it will not affect the string in the other stack
-            nums_str  += str(root.val)
+            # I times 10 to nums here, so 4->9->5 will become 495
+            # Since 4 * 10 + 9 = 49, and 49 * 10 + 5 = 495, which match the problem requirements 
+            nums = nums * 10 + root.val
             if not root.left and not root.right:
-                return nums.append(nums_str)
+                return nums
                 
-            sumNumbersHelper(root.left, nums_str)
-            sumNumbersHelper(root.right, nums_str)
+            l_sum= sumNumbersHelper(root.left, nums)
+            r_sum = sumNumbersHelper(root.right, nums)
             
-        sumNumbersHelper(root, "")
-        for n in nums:
-            sums += int(n)
-        return sums
+            return l_sum + r_sum
+            
+        return sumNumbersHelper(root, 0)
+   
 
-        return sumNumbersHelper(root, "", sums)
+
+        
+
+        
+        
      
             
 
