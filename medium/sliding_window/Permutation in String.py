@@ -1,31 +1,33 @@
-"""
-This problem is very similar to  438: Find All Anagrams in a String. Revisit that problem if I forget:
-Intuition:
-Since the problem specify it only contains lower case letter,
-We can use an counting array of size 26 to keep track of the count of each character
-A permutation of string is, if their character count are the same, then one is the permutation of the other,
-that is, if s1_count == substring_count, then it is substring is a permutation of s1.
-With that information, we can initialize two counting array, s1_count, subs_count
-s1_count store the counting of s1, where s1 is the target string to find
-subs_count store the counting of a substring in s2, use it to compare to s1_count
+# This problem is very similar to Leetcode 438: Find All Anagrams in a String.
+# Revisit that problem if I forget the technique.
 
-initialize s1_count, so s1_count represent s1 correctly, in the code, I loop through s2 and store it to subs_table at the same time as a small optimization
-so I can compare two counting array imiatedly after the first loop, but this is just optimization and its not necessary
+# Intuition:
+# Since the problem specifies that the strings only contain lowercase letters,
+# we can use an array of size 26 to count character frequencies.
 
-inialize i as a right pointer to keep track of the current window, such that i is the left pointer, j is the right pointer, i -> j is the current window
-start looping at len(s1), since we already get the count of the first len(s1) character
-if j - i >= len(s1), it means that the current window/substring is longer than s1, so it can't be the permutation of s1, we need to shrink the window
-take out the left most character from the counting array, that is "subs_count[ord(s2[i]) - ord("a")] -= 1],increment i by 1 to keep track of the current window
-add the right most character to the window, that is "subs_count[ord(s2[j]) - ord("a")] += 1
-check if s1_count == subs_count, if they are equal, then the current window is a permutation of s1, return True immediately
+# Key Idea:
+# Two strings are permutations if and only if their character counts are the same.
+# So if s1_count == subs_count (a substring window in s2), then that window is a permutation of s1.
 
-if nothing return after the loop, permutation is not found in any window/substring of s2, so we can safely return False
+# Approach:
+# 1. Initialize two arrays of size 26:
+#    - s1_count: frequency of characters in s1 (the target pattern).
+#    - subs_count: frequency of the current sliding window in s2.
+#
+# 2. Pre-fill s1_count with frequencies from s1.
+#    Pre-fill subs_count with the first len(s1) characters from s2.
+#
+# 3. Start a sliding window from index len(s1) to end of s2:
+#    - For each step:
+#       a. Remove the leftmost character of the previous window.
+#       b. Add the rightmost character of the new window.
+#       c. Compare the updated subs_count with s1_count.
+#          If they match, return True.
+#
+# 4. If no matching window is found, return False.
 
-
-
-"""
-
-
+# Time Complexity: O(n) where n = len(s2), since we update the window in constant time.
+# Comparing two 26-element arrays is O(1).
 
 
 class Solution(object):
