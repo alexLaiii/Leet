@@ -68,20 +68,21 @@ same logic until the for loop of first level ends
 class Solution(object):
     def permute(self, nums):
         res = []
+
         def backtrack(permute, visited):
             if len(permute) == len(nums):
                 res.append(permute[:])
                 return
-            for i in range(len(nums)):
-                if nums[i] not in visited:
-                    visited[nums[i]] = True
-                    permute.append(nums[i])
+            for n in nums:
+                if n not in visited:
+                    permute.append(n)
+                    visited.add(n)
                     backtrack(permute, visited)
-                    visited.pop(nums[i])
                     permute.pop()
-        # visited is initialized as a hashmap because it provide O(1) time complexity
-        backtrack([], {})
+                    visited.remove(n)
+        backtrack([], set())
         return res
+
 
         # res = []
         # def backtrack(permute):
