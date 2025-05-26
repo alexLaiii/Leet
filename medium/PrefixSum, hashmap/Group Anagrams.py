@@ -15,16 +15,7 @@ Notes: I cast tuple() type to the count array because array is not hashable in p
 
 Time Complexity: O(m*n)
 Space Complexity: O(m*n)
-
-
-
-
-
 """
-
-
-
-
 
 class Solution(object):
     def groupAnagrams(self, strs):
@@ -48,6 +39,40 @@ class Solution(object):
                 results[maps[count]].append(strs[i])
         
         return results
+
+
+
+"""
+Solution 2:
+check the character count of each string in strs, store the counting array as a key into the hash_map, with the corresponding value as a list of strings
+whenever hit a string with the same character count in hash_map, append that strings into that key:value,
+If its a new_count (never happen before): create a new key in the hash_map
+
+After all the strings is checked,
+loop through the hash_maps and append all the value(these are list) to the result.
+
+Time complexity: 
+O(n * m) -> n is the number of strings in strs, m is the average length of each strings
+Second loop -> the worst case is no string is a anagram of the other, so the hash_map would have size n, so it will be O(m*n + n)-> which simplify to O(m*n)
+Space complexity:
+O(1) for store the character count (fixed 26)
+O(n + n) for stored the result and hash_map -> which simplifies to O(n)
+"""
+
+class Solution(object):
+    def groupAnagrams(self, strs):
+        res = []
+        hash_table = {}
+        for s in strs:
+            s_count = [0] * 26
+            for c in s:
+                s_count[ord(c) - ord("a")] += 1
+            hash_table[tuple(s_count)] = hash_table.get(tuple(s_count), [])
+            hash_table[tuple(s_count)].append(s)
+        
+        for key in hash_table:
+            res.append(hash_table[key])
+        return res
         
         # O(m*nlogn)/O(m*n)
         # big_maps = {}
