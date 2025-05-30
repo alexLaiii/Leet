@@ -52,17 +52,17 @@ from collections import deque
 class Solution(object):
     def maxSlidingWindow(self, nums, k):
         # monotonic queue solution
-        res, q = [], deque()
-        for i in range(len(nums)):
-            while q and q[-1][0] < nums[i]:
+        res, q, left = [], deque(), 0
+        for right in range(len(nums)):
+            while q and q[-1][0] < nums[right]:
                 q.pop()
-            q.append((nums[i], i))
-            if q[0][1] <= i - k:
+            q.append((nums[right], right))
+            if q[0][1] < left:
                 q.popleft()
-            if i >= k - 1:
+            if right >= k - 1:
                 res.append(q[0][0])
+                left += 1
         return res
-
 
         
         
