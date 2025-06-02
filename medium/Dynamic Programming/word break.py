@@ -54,11 +54,13 @@ class Solution(object):
         dp[0] = True
         for i in range(1, len(dp)):
             for e in wordDict:
-                if s[i- len(e):i] == e and dp[i - len(e)] == True:
-                    dp[i] =True
+                if i >= len(e) and s[i- len(e):i] == e and dp[i - len(e)]:
+                    dp[i] = True
                     break
-    
         return dp[-1]
+        
+
+        
         
 
         
