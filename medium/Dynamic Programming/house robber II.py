@@ -14,14 +14,19 @@ We solve both cases using the original House Robber logic, and return the maximu
 
 class Solution(object):
     def rob(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        if(len(nums) == 1):
+        # two route solution, compare which route gets more at the end
+        if len(nums) == 1:
             return nums[0]
-        r1_prev, r1_max, r2_prev, r2_max = 0,0,0,0
-        for i in range(len(nums) - 1):
-            r1_max,r1_prev = max(nums[i] + r1_prev, r1_max), r1_max
-            r2_max,r2_prev = max(nums[i+1] + r2_prev, r2_max), r2_max
-        return max(r1_max,r2_max)
+        if len(nums) == 2:
+            return max(nums[0], nums[1])
+        
+        # if rob house 1
+        r1 = [nums[0], max(nums[0], nums[1])]
+        # if rob house 2
+        r2= [nums[1], max(nums[1], nums[2])]
+
+        for i in range(2, len(nums) - 1):
+            r1[0], r1[1] = r1[1], max(r1[1], r1[0] + nums[i])
+        for i in range(3, len(nums)):
+            r2[0], r2[1] = r2[1], max(r2[1], r2[0] + nums[i])
+        return max(r1[1], r2[1])
