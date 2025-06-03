@@ -45,6 +45,9 @@ class Solution(object):
             if not root:
                 return 0
             prefix += root.val
+            # This checks: "How many earlier subpaths had a sum such that, if removed from the current path, the remaining path equals targetSum?"
+            # In other words: Have I seen a prefix sum 'x' before such that x + targetSum == curr_sum?
+            # If yes, it means a valid subpath ending at the current node exists — so we increment the result.
             count = path[prefix - targetSum] if prefix - targetSum in path else 0
             path[prefix] = 1 + path.get(prefix, 0)
             left = dfs(root.left, prefix, path)
@@ -53,6 +56,25 @@ class Solution(object):
             return count + left + right
         sums = dfs(root, 0, {0:1})
         return sums
+
+class Solution(object):
+    def pathSum(self, root, targetSum):
+        self.res = 0
+        def dfs(root, curr_sum, prefix_sum):
+            if not root:
+                return
+            curr_sum += root.val
+            # this check: "How many earlier subpaths had a sum that, if removed from the current path, would leave exactly targetSum?"
+            # “Have I ever seen a path that sums to x before?, because x + targetSum = CurrSum, if x is founded = a previous path is found”
+            if curr_sum - targetSum in prefix_sum:
+                self.res += prefix_sum[curr_sum - targetSum]
+            prefix_sum[curr_sum] = 1 + prefix_sum.get(curr_sum, 0)
+            dfs(root.left, curr_sum, prefix_sum)
+            dfs(root.right, curr_sum, prefix_sum)
+            prefix_sum[curr_sum] -= 1
+        dfs(root, 0, {0:1})
+        return self.res
+            
         
         
 
