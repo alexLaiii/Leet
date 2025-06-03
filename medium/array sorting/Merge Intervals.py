@@ -22,18 +22,33 @@ Space Complexity:
 
 class Solution(object):
     def merge(self, intervals):
-        
-        intervals.sort(key=lambda x:x[0])
+        intervals.sort(key=lambda i:i[0])
         res = [intervals[0]]
-        for interval in intervals:
-            # means overlap
-            if  res[-1][1] >= interval[0] and res[-1][1] < interval[1]:
-                res[-1][1] = interval[1]
-            # not overlap but new pair
-            elif res[-1][1] < interval[1]:
-                res.append(interval)
+
+        for start, end in intervals:
+            if res[-1][1] >= start:
+                res[-1][1] = max(end, res[-1][1])
+            # Note: The first condition covers all overlapping cases — including full containment.
+            # For example, if res = [1, 10] and the current interval = [5, 9], since 10 >= 5, it triggers the merge.
+            # Any interval that doesn't satisfy the first condition must be completely separate.
+            # For example, res = [1, 10] and interval = [11, 13] — no overlap, so it's added as a new interval.
+            else:
+                res.append([start, end])
         return res
+
             
+            
+
+
+   
+
+            
+            
+                
+                
+            
+        
+        
             
 
 
