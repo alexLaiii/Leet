@@ -1,13 +1,27 @@
-"""
-Idea:
-The solution of this is based on a decision Tree structure
-where at each stage with have len(candidates) choice and decided we should include it or not. (Similar to "17. Letter Combinations of a Phone Number")
+        """
+        Solves the Combination Sum problem using DFS + backtracking.
 
-The constraint here is, combinations is required, that is [2,2,3] and [2,3,2] is consider as the same
-So we pass an start index tothe next stage to prevent the revisit route, prevent it from causing permutations
+        At each recursive step, we explore combinations that add up to the target.
+        Each candidate can be reused unlimited times.
 
-"""
+        To avoid duplicate combinations (e.g., [2,2,3] vs [2,3,2]), we use a `start` index
+        to ensure we only consider candidates at or after the current position,
+        effectively avoiding permutations and ensuring uniqueness.
 
+        Time Complexity:
+            O(2^t) — where t is the target value.
+            Each number can be either included or not at each level, forming a binary decision tree.
+            Worst-case occurs when target is built from many small values (e.g., lots of 1s).
+
+        Space Complexity:
+            O(t) — maximum recursion depth in the worst case (e.g., all 1s to reach target).
+            Output space depends on number of valid combinations.
+
+        Approach:
+            - Backtrack only when current sum ≤ target
+            - Append valid paths when current sum == target
+            - Use `start` index to avoid revisiting earlier candidates (preventing duplicates)
+        """
 
 class Solution(object):
     def combinationSum(self, candidates, target):
