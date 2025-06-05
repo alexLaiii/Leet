@@ -1,26 +1,37 @@
 """
-Initialize two pointers, left and right.
-Use binary search to narrow down the region containing the minimum.
-If nums[mid] > nums[right], the minimum lies to the right. (Because it is rotated, a normal sorted array will never satisfy this condition)
-Otherwise, it lies to the left or could be the mid itself. (Might rotated, might not, but the rotation didnt cause minimum value lies in the right, tho there might be larger value lies in the left)
-The loop ends when left == right, pointing to the minimum.
-This is a clean and optimal binary search pattern that's highly valuable in technical interviews.
+Explanation:
+
+- Initialize two pointers: `left` and `right`.
+- Use binary search to narrow down the region containing the minimum.
+
+Key Logic:
+- If `nums[mid] > nums[right]`, the minimum must lie **to the right of mid**. (Noted that this will never happen if the array is not rotated)
+  - Because in a rotated array, this means the left half is still sorted but the pivot (smaller values) is on the right.
+- Otherwise, the minimum lies **to the left (including mid)**.
+  - This could mean the right half is sorted, or the array is not rotated at all.
+
+- The loop continues until `left == right`, which points to the smallest element.
+
+Why this works:
+- This is a classic binary search variant used for rotated arrays.
+- It guarantees O(log n) time and is a valuable pattern in interviews.
+
+Time Complexity:
+O(logn): binary search
+Space Complexity:
+O(1)
 """
 
 class Solution(object):
     def findMin(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        left = 0
-        right = len(nums) - 1
+        # find minimum value
+        left, right = 0, len(nums) - 1
         while right > left:
-            mid = (right + left) // 2
-            # if mid > right, then the array must be rotated, the minimum lies in the right direction
+            mid = (left + right) // 2
             if nums[mid] > nums[right]:
                 left = mid + 1
-            elif nums[mid] <= nums[right]:
+            else:
                 right = mid
         return nums[left]
+
 
