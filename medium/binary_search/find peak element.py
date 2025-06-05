@@ -49,3 +49,19 @@ class Solution(object):
 
         # left == right at the end → that’s the peak
         return right
+
+
+
+## Solution 2, more explicit
+class Solution(object):
+    def findPeakElement(self, nums):
+        left, right = 0, len(nums) - 1
+        
+        while right >= left:
+            mid = (right + left) // 2
+            if mid < len(nums) - 1 and nums[mid] < nums[mid + 1]:
+                left = mid + 1
+            elif mid > 0 and nums[mid] < nums[mid - 1]:
+                right = mid - 1
+            else:
+                return mid
