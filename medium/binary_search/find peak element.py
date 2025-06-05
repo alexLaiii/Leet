@@ -1,41 +1,51 @@
-"""
-This is something called a closing sliding window mountain sorted array, huh
-These constraint are really important in this question: 
-1. -231 <= nums[i] <= 231 - 1
-2. nums[i] != nums[i + 1] for all valid i.
+This problem behaves like a “sliding mountain array” — not sorted, but has directional slope patterns.
 
-Condition 1 ensure that the peak element exists, since if on part is ascending, then the other part must be descending, also ensure that no matter how right or how left
-your binary search start with, you will always finda peak later on since the last element is always smaller than the second last element.
-Condition 2 ensure that neighbour deplicate does not exist, so there will be no unsolvable case like [4,5,5,5,5,5,5,4]
+The constraints are extremely important:
+1. -2³¹ <= nums[i] <= 2³¹ - 1  
+2. nums[i] != nums[i + 1] for all valid i
 
-We use binary search to randomly find an element and check its next element, if the next element is greater, then the next element might be peak, might be not
-But what we can make sure is the current element cannot be peak, so we set left to the index of the next element and continue searching.
+✅ Condition 1 ensures that a peak must exist — if one side goes up, the other must go down.  
+✅ Condition 2 ensures no duplicates between neighbors, so there's always a clear “greater” direction.  
+This prevents edge cases like [4,5,5,5,5,5,5,4], where no strict peak would be found.
 
-If the next element is smaller, then this element might be peak, again might be not, be we cannot exclude it, so we set right to the current index to smaller the gap.
-By looping this process, the left index keep increasing and the right index keep decreasing, they we eventually met at the peak point.
-Thus, when left == right, the result is found, and left and right are the index of the peak elenment
+---
 
-Time Complexity:
-O(logn): binary Search
-Space Complexity:
-O(1)
+### 🔍 How the binary search works:
 
-"""
+- We randomly pick a `mid` and check `nums[mid + 1]`
+- If `nums[mid] < nums[mid + 1]`, then:
+  → The next element might be the peak, but the **current one cannot be**
+  → So move `left = mid + 1`
+
+- If `nums[mid] > nums[mid + 1]`, then:
+  → The current element **might be** the peak
+  → So move `right = mid` (we don’t exclude `mid`)
+
+We keep narrowing the range. Eventually `left == right`, which is the **peak index**.
+
+---
+
+### ⏱ Time and Space:
+- **Time:** O(log n) — classic binary search
+- **Space:** O(1) — just using pointers
+
 
 
 
 class Solution(object):
     def findPeakElement(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
         left, right = 0, len(nums) - 1
-        while(left != right):
-            mid = (left + right) // 2
-            if(nums[mid] > nums[mid + 1]):
-                right = mid
-            else:
-                left = mid + 1
-        return left
         
+        while right > left:
+            mid = (right + left) // 2
+
+            # Ascending slope → peak must be on the right
+            if nums[mid] < nums[mid + 1]:
+                left = mid + 1
+
+            # Descending slope → peak could be mid or on the left
+            else:
+                right = mid
+
+        # left == right at the end → that’s the peak
+        return right
