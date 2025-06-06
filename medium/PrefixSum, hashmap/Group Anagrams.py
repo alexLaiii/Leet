@@ -13,8 +13,8 @@ index: keep track of the position on where each group on strings should be place
 
 Notes: I cast tuple() type to the count array because array is not hashable in python, but tuple is.
 
-Time Complexity: O(m*n)
-Space Complexity: O(m*n)
+Time Complexity: O(m*n), m = number of strings, n = average len of each strings
+Space Complexity: O(m*n),  m for worst case has m keys, n is the strings
 """
 
 class Solution(object):
@@ -52,11 +52,12 @@ After all the strings is checked,
 loop through the hash_maps and append all the value(these are list) to the result.
 
 Time complexity: 
-O(n * m) -> n is the number of strings in strs, m is the average length of each strings
-Second loop -> the worst case is no string is a anagram of the other, so the hash_map would have size n, so it will be O(m*n + n)-> which simplify to O(m*n)
+O(m * n) -> m = number of strings, n = average len of each strings
+Second loop -> the worst case is no string is a anagram of the other, so the hash_map would have size m, so it will be O(m*n + m)-> which simplify to O(m*n)
 Space complexity:
 O(1) for store the character count (fixed 26)
-O(n + n) for stored the result and hash_map -> which simplifies to O(n)
+O(m * n + m): m*n for the hash_map, worst case m keys, and n to store an average string, so m*n
+              m for the result array
 """
 
 class Solution(object):
