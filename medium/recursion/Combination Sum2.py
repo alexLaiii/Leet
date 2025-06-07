@@ -1,22 +1,49 @@
 """
-Idea: 
-First, each candidates in this problem are only allow to use once, so if you choose the first i candidates, then the only candidates you can choose for next is i + 1
-Therefore, in the recursive call, we pass i+1 as the start for next path
-Second, which is the hardest part in this problem, is removing the duplicate path, since the array can contain duplicate candidates, we cannot simplfy use the strategy for combination sum 1
-Core idea: 
-The first occurrence of a number already explores all valid paths using that value, so we can skip all the future duplicates.
-And thats why we need to sort the array first, so we can guranteen all the duplicates are stick together:
-Example [1,1,2,3]
-since 1 is sticked together, after checking all the path for the first 1, then the second 1 will be skipped
-Counter Example [1,3,1,2]
-after checking all the path for the first 1, the next value is 3, which is not a duplicate to 1, so it will run correctly, 
-but the problem kicks in after checking all the path for 3, we encounter 1 again, but the previous is 3, which is not same as 1, so we would check it again,causing duplicates
+Idea:
+Each candidate can only be used once. So, after choosing a candidate at index `i`, we must start the next recursion from `i + 1`.
 
-Fix 1: Sort the array first to make sure all the duplicate are neigbours, so you can skip it correctly
-Fix 2: Use a hash set to store all the checked values, skip it if its in set, (ahh still need sorted)
-Fix 3: loop all the previous element to check if it is seen already, trade off: worst time complexity
+The core challenge is to avoid generating duplicate combinations, since the array may contain duplicate values.
 
+Core Idea:
+The first occurrence of a number already explores all valid paths using that value, so we should skip any future duplicates at the same recursion level.
+
+To do this:
+- First, **sort the array** so that duplicates are adjacent.
+- Then, in the DFS loop, skip over any duplicate candidates:
+    if i > start and candidates[i] == candidates[i - 1]:
+        continue
+
+Why sorting is necessary — counterexample:
+Example: [1, 3, 1, 2], target = 3
+- Without sorting, the two 1s are separated.
+- After checking all paths from the first 1, we move on to 3.
+- Later we encounter the second 1, and since its previous value (3) != 1, we can't detect it's a duplicate.
+- This leads to repeated combinations like [1, 2] appearing more than once.
+
+Fixes:
+1. Sort the array to ensure duplicates are grouped together.
+2. Alternatively, use a hash set to track used elements per recursion level (less efficient).
+3. Or loop back to check for prior occurrences manually (slower).
+
+Implementation:
+- Use DFS (backtracking) to build paths.
+- Use `i + 1` as the new start index to enforce single-use of each candidate.
+- If `curr_sum == target`, store the path.
+- If `curr_sum > target`, prune that path.
+
+Duplicate prevention condition:
+    if i > start and candidates[i] == candidates[i - 1]:
+        continue
+This ensures we only process the **first** instance of each duplicate value at each level.
+
+Time Complexity:
+- O(2^n + n log n): n log n for sorting, 2^n for subset generation in the worst case
+
+Space Complexity:
+- O(k): total space used by all valid combinations in result
+- O(n): recursion stack depth
 """
+
 
 # Solution 1
 class Solution(object):
