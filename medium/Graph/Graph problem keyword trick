@@ -1,0 +1,2 @@
+“Is the graph directed?”: 	DFS + topological sort
+“Is the graph undirected?”: Union-Find or DFS (parent check)
