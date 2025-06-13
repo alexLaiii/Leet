@@ -68,9 +68,6 @@ Since this is an undirected graph, connecting two nodes means connecting all nod
 - **O(n)** — Two arrays: `parents` and `set_count`, each of size `n + 1`.
 """
 
-
-
-
 class Solution:
     def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
         n = len(edges)
@@ -94,3 +91,38 @@ class Solution:
             if find(n1) == find(n2):
                 return [n1,n2]
             union(n1,n2)
+
+"""
+Cleaner Solution
+"""
+class Solution:
+    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
+        N = len(edges)
+        pars = [i for i in range(N + 1)]
+        ranks = [1 for i in range(N + 1)]
+        
+
+        def find(node):
+            if pars[node] != node:
+                pars[node] = find(pars[node])
+            return pars[node]
+        def union(n1,n2):
+            p1,p2 = find(n1), find(n2)
+            if p1 == p2:
+                return False
+
+            if ranks[p1] > ranks[p2]:
+                ranks[p1] += ranks[p2]
+                pars[p2] = p1
+            else:
+                ranks[p2] += ranks[p1]
+                pars[p1] = p2
+            return True
+
+
+        for n1,n2 in edges:
+            if not union(n1,n2):
+                return [n1,n2]
+            
+        
+       
