@@ -117,8 +117,8 @@ class Solution:
         if n - 1 > len(connections):
             return -1
         N = len(connections)
-        pars = [i for i in range(n + 1)]
-        rank = [1 for i in range(n + 1)]
+        pars = [i for i in range(N + 1)]
+        rank = [1 for i in range(N + 1)]
 
         def find(node):
             if pars[node] != node:
@@ -142,6 +142,9 @@ class Solution:
                 used_edge += 1
         
         return n - 1 - used_edge
+
+
+        
 
 
         
