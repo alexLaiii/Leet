@@ -107,4 +107,42 @@ class Solution:
                 used_edge += 1
                 union(c1, c2)
         return n - 1 - used_edge
+
+
+"""
+Cleaner solution
+"""
+class Solution:
+    def makeConnected(self, n: int, connections: List[List[int]]) -> int:
+        if n - 1 > len(connections):
+            return -1
+        N = len(connections)
+        pars = [i for i in range(n + 1)]
+        rank = [1 for i in range(n + 1)]
+
+        def find(node):
+            if pars[node] != node:
+                pars[node] = find(pars[node])
+            return pars[node]
+
+        def union(n1,n2):
+            p1, p2 = find(n1), find(n2)
+            if p1 == p2:
+                return False
+            if rank[p1] > rank[p2]:
+                rank[p1] += rank[p2]
+                pars[p2] = p1
+            else:
+                rank[p2] += rank[p1]
+                pars[p1] = p2
+            return True
+        used_edge = 0
+        for c1,c2 in connections:
+            if union(c1,c2):
+                used_edge += 1
+        
+        return n - 1 - used_edge
+
+
+        
                 
