@@ -1,20 +1,47 @@
 """
-Solution 1(DFS approach with parent check)
-Idea:
-Create an Adjency list to represent the input graph.
-And then we remove one edges in every loop to see if edges[0] can still reach edges[1] despite the removal.
-  - If it is still reachable, then this edge is redundant, so we can return it
-  - If it is not reachable, then this edge is needed, we add it back to the graph and continue searching
+Solution 1: DFS Approach with Parent Check
 
-In the recursive function canReach, if need to check the parent of the current node (which node the call is coming from).
-Because this is a bi-directional graph, therefore, only indirect connection count as a cycle, neigbour will only cause infinite cycle, as this kind of cycle
-are not consider in this problem.
-Base case: if we traverse back to some node along the path -> cycle still exist -> return False
-           if we reach the node n2 after the edge removal, cycle not exist(as problem guranteen that remove one correct edge will destroy the cycle) -> return True.
-whenenver canReach() is true, the current edge will be redundant.
+ Idea:
+We use Depth-First Search (DFS) to detect cycles in an undirected graph.
 
-Note that since the problem want the last redundant connection in the edges: so we loop backwards in edges:List.
+ Step-by-step:
+1. Build an adjacency list from the edges.
+2. For each edge (starting from the end of the list, since the problem wants the *last* redundant one):
+   - Temporarily remove the edge from the graph.
+   - Check if its two nodes are still connected using DFS.
+     - If yes → a path still exists → cycle remains → this edge is redundant → return it.
+     - If no → this edge is necessary → restore the edge and continue.
 
+ Why we check the parent node:
+Since the graph is undirected, neighbors can point back to their caller (parent).
+So we ignore the immediate parent in DFS to avoid infinite loops.
+Only **indirect** paths are considered real cycles here.
+
+ Base Cases for canReach():
+- If `curr == target` → a path exists → cycle remains → this edge is redundant.
+- If a node is revisited (and it's not the parent) → cycle.
+- Otherwise, explore neighbors recursively.
+
+ Edge Scanning Direction:
+We scan the edges list **backwards** because the problem asks for the **last** redundant edge.
+
+---
+
+ Time Complexity:
+- Let **n** be the number of nodes and **e** be the number of edges.
+- In the worst case, for each edge, we do a DFS.
+- DFS can visit up to **O(n)** nodes, and there are **e** edges.
+- So total worst-case time: **O(n²)**
+
+ Space Complexity:
+- Adjacency list: **O(n + e)** → max **O(n²)** for dense graph.
+- DFS call stack + visited set: **O(n)**
+
+---
+Conclusion:
+ Easy to implement  
+ Slower than Union Find for large inputs  
+ Still accepted on LeetCode within limits
 """
 
 
