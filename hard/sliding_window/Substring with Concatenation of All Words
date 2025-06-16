@@ -60,41 +60,39 @@ Lesson: Think in **chunks**, not characters.
 """
 
 
-
-
 class Solution:
     def findSubstring(self, s: str, words: List[str]) -> List[int]:
+        # Sliding by words
         k = len(words[0])
+        if len(s) < k * len(words):
+            return []
+        
         words_map = {}
-        for word in words:
-            words_map[word] = words_map.get(word, 0) + 1
-        req_matches = len(words_map)
-        res = []
+        for w in words:
+            words_map[w] = 1 + words_map.get(w, 0)
+        res, req_match = [], len(words_map) 
         for offset in range(k):
             l = r = offset
             seen = {}
-            matches = 0
-
+            curr_match = 0
             while r + k <= len(s):
-
-                if r - l  >= k * len(words):
-                    old_w = s[l:l+k]
-                    if old_w in words_map:
-                        if seen[old_w] == words_map[old_w]:
-                            matches -= 1
-                        seen[old_w] -= 1
-                    l +=  k
-                new_w = s[r:r+k]
-    
+                if r + k - l > k * len(words):
+                    rm_w = s[l : l + k]
+                    if rm_w in words_map:
+                        if seen[rm_w] == words_map[rm_w]:
+                            curr_match -= 1
+                        seen[rm_w] -= 1
+                    l += k
+                new_w = s[r: r+k]
                 if new_w in words_map:
                     seen[new_w] = 1 + seen.get(new_w, 0)
                     if seen[new_w] == words_map[new_w]:
-                        matches += 1
-                    if matches == req_matches:
+                        curr_match += 1
+                    if curr_match == req_match:
                         res.append(l)
                 r += k
         return res
-                    
+        
                 
             
         
