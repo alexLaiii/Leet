@@ -1,0 +1,100 @@
+"""
+This problem absolutely humbled me.
+
+One of the hardest sliding window problems I've done. The solution is very counterintuitive.
+
+🔻 Failed Attempts:
+
+1. **Brute Force (Sliding by 1 char, check every window):**
+   - I slid the window one character at a time and checked if each window contained all the words using a hashmap.
+   - It worked logically but timed out due to O(n * m * k) complexity — as expected.
+
+2. **Optimized Sliding by 1 char (Add one char, remove one char):**
+   - I tried maintaining a rolling count of words by adding and removing words as substrings of size `k`.
+   - It failed for cases like:
+     ```
+     s = "ababaa", words = ["ab", "ba", "ba"]
+     ```
+     - It falsely counted words: e.g., it saw both `"ab"` and `"ba"` multiple times because the sliding by 1 char overlaps substrings incorrectly.
+     - Result: It ended up with `{ab: 2, ba: 2}` when that window doesn't even exist properly — the cuts are invalid.
+
+✅ **Correct Approach: Sliding Window with Offsets (Word-level):**
+
+- **Key Insight:** Slide by **word length**, not by character. Since the problem ensure Every word has the same length, so:
+  - No word is a substring of another.
+  - All valid matches must align to a word boundary.
+
+- **Offset windows:** To handle all alignment cases, loop from `offset = 0` to `k - 1`.
+  - For example, if `k = 3`, check starting indices 0, 1, and 2 separately.
+  - This ensures we catch all valid windows that align with word boundaries.
+
+---
+
+🔧 Implementation Details:
+
+- Let `k = len(words[0])` (length of each word)
+- `words_map`: frequency count of words in the input list `words`
+- `seen`: sliding window frequency map
+- `matches`: number of words where `seen[word] == words_map[word]`
+- `req_matches = len(words_map)`
+- For each offset:
+  - Initialize `l = r = offset`
+  - Slide the window in steps of `k`
+  - If window size exceeds `k * len(words)`, because the windows are only valid iff (size == k * len(words)), remove the leftmost word
+  - If `matches == req_matches`, record `l` as a valid start index
+
+---
+
+📈 Time Complexity:
+- `O(n)`: Outer loop runs `k` times, inner loop runs `n/k` times → `O(k * n/k) = O(n)`
+
+📦 Space Complexity:
+- `O(m * k)` for hash maps, where `m = len(words)`
+
+---
+This problem is deceptively hard because:
+- It's easy to write something that "mostly works" but breaks on offset or frequency edge cases.
+- You must fully control the window at the **word level**, and get all frequency updates exactly right.
+
+Lesson: Think in **chunks**, not characters.
+"""
+
+
+
+
+class Solution:
+    def findSubstring(self, s: str, words: List[str]) -> List[int]:
+        k = len(words[0])
+        words_map = {}
+        for word in words:
+            words_map[word] = words_map.get(word, 0) + 1
+        req_matches = len(words_map)
+        res = []
+        for offset in range(k):
+            l = r = offset
+            seen = {}
+            matches = 0
+
+            while r + k <= len(s):
+
+                if r - l  >= k * len(words):
+                    old_w = s[l:l+k]
+                    if old_w in words_map:
+                        if seen[old_w] == words_map[old_w]:
+                            matches -= 1
+                        seen[old_w] -= 1
+                    l +=  k
+                new_w = s[r:r+k]
+    
+                if new_w in words_map:
+                    seen[new_w] = 1 + seen.get(new_w, 0)
+                    if seen[new_w] == words_map[new_w]:
+                        matches += 1
+                    if matches == req_matches:
+                        res.append(l)
+                r += k
+        return res
+                    
+                
+            
+        
