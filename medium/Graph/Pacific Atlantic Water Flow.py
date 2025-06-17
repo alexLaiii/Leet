@@ -41,6 +41,8 @@ Each cell is visited at most twice (once per ocean)
 
 Space Complexity: O(m * n)
 Two sets (pacific & atlantic) store up to m * n elements
+
+
 """
 
 
@@ -81,6 +83,8 @@ class Solution:
 """
 Naive brute force solution:
 DFS everycell and check if it can reach both ocean
+Time Complexity: O((m*n)^2), Since every cell can travel up to m*n cell.
+Space Complexity: O(m*n), the result list
 """
 
 class Solution:
