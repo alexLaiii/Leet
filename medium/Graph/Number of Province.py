@@ -74,26 +74,29 @@ Return the count at the end.
 
 Time Complexity:
 - O(n²)
-  We have to go through each cell no matter what, and there are total n² cells in the matrix.
+ The total DFS cost is n²
 
 Space Complexity:
 - O(V) for the visited set
 """
 
 
-class Solution(object):
-    def findCircleNum(self, isConnected):
-        count, visited = 0, set()
+class Solution:
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        visited = set()
+        province_count = 0
         def dfs(city):
             if city in visited:
                 return
             visited.add(city)
             for i in range(len(isConnected[city])):
-                if isConnected[city][i] == 1 and i not in visited:
+                if isConnected[city][i] == 1:
                     dfs(i)
-        for each_city in range(len(isConnected)):
-            if each_city not in visited:
-                dfs(each_city)
-                count += 1
-        return count
+                
+
+        for i in range(len(isConnected)):
+            if i not in visited:
+                dfs(i)
+                province_count += 1
+        return province_count
  
