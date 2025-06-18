@@ -1,0 +1,31 @@
+"""
+Supposed to be one of the most basic backtracking problems.  
+If you forget how to do this, go back and review the explanation for "Combination Sum".
+
+Idea:  
+Use backtracking by exploring one path, and then backtrack (remove the last added element) to explore new paths, avoiding redundant recomputation from root to leaf every time.
+
+Key Twist for This Problem:  
+We must avoid generating duplicates like [2,1] and [1,2] — which represent the same combination.  
+To enforce uniqueness, we ensure that future choices only include numbers **greater than the current number**.
+
+This is done by passing `i + 1` in the recursive call — so we never revisit or go backward in the number sequence.
+
+Because the problem requires combinations from **1 to n inclusive**, the for loop runs from `start` to `n + 1` (since Python's `range()` is exclusive at the end).
+"""
+
+
+
+class Solution:
+    def combine(self, n: int, k: int) -> List[List[int]]:
+        res = []
+        def backtrack(start, path):
+            if len(path) == k:
+                res.append(path[:])
+                return
+            for i in range(start, n + 1):
+                path.append(i)
+                backtrack(i + 1, path)
+                path.pop()
+        backtrack(1, [])
+        return res
