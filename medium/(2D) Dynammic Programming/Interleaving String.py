@@ -1,37 +1,41 @@
 """
 Idea:
-An Interleaving String is to determine If a string s3 can form by using all the characters from s1 and s2 but perceiving their orders.
+An Interleaving String checks whether a string `s3` can be formed by interleaving **all characters** from `s1` and `s2` while preserving their original character orders.
 
-Why 3 pointer approach doesn't work. 
-    First I try to maintain a 3 pointer appraoch on s1,s2,s3 respectively
-    But I ran into problem quickly,Consider Example:
-    s1 = "aabc"
-    s2 = "abad"
-    s3= "aabadabc"
-    You can realize along your decision of picking from s1 or s2, you have so many choice as consider valid at that point,
-    but end up only one specific way is possible to reach the end.
-    So how to decide which path we take at that point?
+Why the 3-pointer approach doesn’t work:
+At first, I tried using three pointers on `s1`, `s2`, and `s3`. But problems arise quickly.  
+Consider this example:
+    s1 = "aabc"  
+    s2 = "abad"  
+    s3 = "aabadabc"
 
-    Thats why we use dynammic programming to cache the previous result, and only continue if the previous path that build the current path is valid
+At various decision points, you may have multiple valid-looking choices (e.g., pick from `s1` or `s2`),  
+but only one **specific interleaving path** will work to fully reach the end of `s3`.
 
-    In each DP cell, we stored:
-    if we took j character from s1, and i character from s2, can we form the substring s3[i + j]?
-    Since this path is taking j character from s1, and i character from s2, so the previous path of this must be one of these cases(or both):
-        1. the current path is based on taking j - 1 character from s1, and i character from s2
-        2. the current path is based on taking j character from s1, and i - 1 character from s2
-    If one of these previous path is valid, means at least one of these can built s3[i + j - 1], then the current path is also valid if
-        # want to take from s1
-        1. the current path is based on taking j - 1 character from s1, and i character from s2, then the j th character of s1 must match the i + j character of s3
-        # want to take from s2
-        2. the current path is based on taking j character from s1, and i - 1 character from s2, the the i th character of s2 must match the i + j character of s3
-    If both previous path is not valid, or the i, j of s1 s2 doesnt match s3, then the current path is not valid, and theres no way to built further, this path is Closed.
+So how do we decide which path is correct at each step?
 
-    Time complexity: O(m * n), m is the length of s2, n is the length of s1. And we travel through the entire DP grid
-    Space complexity: O(m * n), DP grid with size m*n
-        
+That's why we use **Dynamic Programming** — to cache the results of previous decisions  
+and only continue building if the previous subpath was valid.
 
+---
+
+DP Definition:
+Each `dp[i][j]` means:
+> Can we form the prefix `s3[:i + j]` using the first `i` characters of `s2` and first `j` characters of `s1`?
+
+The current state depends on:
+1. Taking from `s1`:  
+   If `dp[i][j - 1]` is True and `s1[j - 1] == s3[i + j - 1]`, then `dp[i][j] = True`
+2. Taking from `s2`:  
+   If `dp[i - 1][j]` is True and `s2[i - 1] == s3[i + j - 1]`, then `dp[i][j] = True`
+
+If neither option is valid, this path is **invalid**, and no further build is possible from here — the path is **closed**.
+
+---
+
+Time Complexity: O(m * n), where m = len(s2), n = len(s1) — full DP grid traversal  
+Space Complexity: O(m * n) — DP grid of size (m+1) × (n+1)
 """
-
 
 class Solution:
     def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
