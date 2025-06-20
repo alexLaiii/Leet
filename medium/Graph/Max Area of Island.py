@@ -7,6 +7,7 @@ Note that whenever we travel a cell, we flood that cell (mark it to 0), to indic
 or for the later for loop, it will recognize it as the same island visited before.
 
 Use a maxArea variable to keepTrack of the largest island, (maxArea = max(maxArea, dfs(i,j)))
+If theres no island, "if grid[i][j] == 1:" will not execute at all, so safety return maxArea = 0.
 """
 
 
