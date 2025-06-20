@@ -1,13 +1,29 @@
 """
-This problem is a variation of "Leetcode 200: Number of islands"
+This problem is a variation of "Leetcode 200: Number of Islands".
 
-Idea: 
-When we find an island (grid[i][j] == 1), we use DFS to go through the entire island and count the the size of the island along the way.
-Note that whenever we travel a cell, we flood that cell (mark it to 0), to indicate it as visited, So it wont visited again 
-or for the later for loop, it will recognize it as the same island visited before.
+Idea:
+When we find an island (i.e., grid[i][j] == 1), we use DFS to traverse the entire island and count its size along the way.
 
-Use a maxArea variable to keepTrack of the largest island, (maxArea = max(maxArea, dfs(i,j)))
-If theres no island, "if grid[i][j] == 1:" will not execute at all, so safety return maxArea = 0.
+Note: Whenever we visit a cell, we flood it (set it to 0) to mark it as visited. This prevents revisiting the same cell later or counting the same island again in future DFS calls.
+
+We maintain a variable `maxArea` to keep track of the largest island seen so far:
+    maxArea = max(maxArea, dfs(i, j))
+
+If there are no islands in the grid, the condition `if grid[i][j] == 1` will never trigger, so `maxArea` stays at 0 and is safely returned.
+
+Time Complexity: O(m * n)
+
+- In the worst case, every cell is land (1), so:
+  - The outer `for` loop checks every cell once → O(m * n)
+  - The `dfs` visits each land cell exactly once → total O(m * n)
+- So total time = O(m * n + m * n) = O(m * n)
+
+Space Complexity: O(m * n)
+
+- Due to recursion stack in DFS.
+- In the worst case (grid full of land), the recursion can go as deep as all cells → O(m * n) stack space.
+- If implemented with BFS and an explicit queue, it would also use up to O(m * n) space.
+
 """
 
 
