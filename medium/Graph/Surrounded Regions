@@ -1,3 +1,58 @@
+"""
+This problem is solved using the same idea as "417. Pacific Atlantic Water Flow".
+
+---
+
+### 💡 Idea:
+Since any region of `"O"` that can travel out-of-bounds is considered *not surrounded*, and the problem wants us to **change all surrounded regions to `"X"`**,  
+we reverse the thinking process:
+
+A region is *not surrounded* **if and only if** it contains at least one cell **on the border**.
+
+So instead of checking which `"O"`s are surrounded, we **start from the border** and mark all `"O"`s that are **connected to a border**.  
+All other `"O"`s must be surrounded and can be changed to `"X"`.
+
+---
+
+### 🧱 Implementation
+
+#### `dfs(r, c)`  
+Standard DFS function. It stores the location of all reachable `"O"`s into the `notSurrounded` set.
+
+---
+
+### 🔍 How to check the border:
+
+```python
+for i in range(N): 
+    if board[0][i] == "O":
+        dfs(0, i)
+    if board[M-1][i] == "O":
+        dfs(M-1, i)
+→ This checks all cells on the top and bottom row.
+for i in range(M):
+    if board[i][0] == "O":
+        dfs(i, 0)
+    if board[i][N-1] == "O":
+        dfs(i, N-1)
+→ This checks all cells on the left and right column.
+After these DFS calls, all "O"s that can reach a border will be added to notSurrounded.
+
+ Final pass:
+Loop through the grid again.
+If a cell is "O" and not in the notSurrounded set, then it is truly surrounded, and should be flipped to "X".
+
+Time Complexity:
+O(m * n)
+Every cell is visited at most once during DFS. The final grid scan is also O(m * n).
+
+Space Complexity:
+O(m * n)
+Worst case: every "O" is connected to a border (e.g., a full board of "O"s).
+All of them go into the notSurrounded set.
+"""
+
+
 class Solution:
     def solve(self, board: List[List[str]]) -> None:
         """
