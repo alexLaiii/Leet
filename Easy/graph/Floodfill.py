@@ -1,9 +1,32 @@
 """
-Easy dfs problem with condition and inplace modification on image.
+### 🧠 Idea:
 
-Find all the adjacent cell that has the same colour as the original color but not the target color.
-And the change it to target colour, thats it
+Easy DFS problem with a condition and in-place modification on the image.
 
+You start from the given pixel and find all adjacent cells that:
+- Have the **same color as the original**
+- Are **not already the target color**
+
+Then you change each of those cells to the target color. That’s it.
+
+---
+
+### ✅ Key Points:
+- Only modify cells that match the original color
+- Prevent infinite recursion if the original color equals the target color
+- In-place update ensures minimal space usage
+
+---
+
+### ⏱ Time Complexity:
+- **O(m × n)**  
+  In the worst case, you visit every cell once (if all cells have the original color).
+
+---
+
+### 🗂 Space Complexity:
+- **O(m × n)** worst case due to DFS recursion stack  
+  Each recursive call goes one level deep per cell in the worst case (e.g., fully connected region).
 """
 
 
