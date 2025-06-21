@@ -70,6 +70,85 @@ class Solution:
             q.append((r,c - 1,time + 1))
     
         return maxTime if fresh == 0 else -1
-  
+"""
+### 🧠 Solution 2 — Layer-by-Layer BFS (Multi-source)
+
+This is also a BFS solution, but this time we simulate the rotting **layer by layer**.
+
+---
+
+### 🥭 Initial Setup:
+- Traverse the grid:
+  - Store all the positions of **initial rotten oranges (`2`)** in the queue.
+  - Count how many **fresh oranges (`1`)** exist.
+
+---
+
+### 🔁 BFS Simulation:
+- Each round of the `while` loop represents **1 minute**.
+- In each round:
+  - We process **all the currently rotten oranges** in the queue.
+  - For each rotten orange:
+    - Check its **4 adjacent neighbors**.
+    - If an adjacent orange is **fresh (`1`)**:
+      - Mark it as **rotten (`2`)**
+      - Decrease the `fresh` count
+      - Add it to the queue to be processed in the next round
+
+We continue this until:
+- There are no more oranges in the queue **or**
+- All fresh oranges are rotted (`fresh == 0`)
+
+---
+
+### ✅ Final Result:
+- If `fresh == 0` after BFS ends → **return `time`**
+- Else → **return `-1`** (some oranges couldn’t be reached)
+
+---
+
+### ⏱ Time Complexity:
+- **O(m × n)** — each cell is visited once
+
+### 🗂 Space Complexity:
+- **O(m × n)** — for the queue (worst case: all cells are rotten/fresh)
+
+"""
+
+class Solution:
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        M, N = len(grid), len(grid[0])
+        q = deque([])
+        fresh = 0
+        for i in range(M):
+            for j in range(N):
+                if grid[i][j] == 2:
+                    q.append((i,j))
+                if grid[i][j] == 1:
+                    fresh += 1
+        
+        directions = [[1,0], [-1,0], [0,1], [0,-1]]
+        time = 0
+        while q and fresh > 0:
+            for i in range(len(q)):
+                r,c = q.popleft()
+                for dr, dc in directions:
+                    nr, nc = r + dr, c + dc
+                    if nr < 0 or nc < 0 or nr >= M or nc >= N:
+                        continue
+                    if grid[nr][nc] == 1:
+                        grid[nr][nc] = 2
+                        fresh -= 1
+                        q.append((nr,nc))
+            time += 1
+        
+        return time if fresh == 0 else -1
+            
+
+
+
+
+
+
                     
         
