@@ -1,3 +1,32 @@
+"""
+This problem is essentially the same as **"130. Surrounded Regions"**.
+
+---
+
+### 💡 Idea:
+
+Similar to *Surrounded Regions*, we use **DFS from the border** and mark all land cells that are **not enclaves** (i.e., land cells that can reach the border). These are stored in a `visited` set.
+
+This time, however, the goal is to **count the land cells that are enclaves** — meaning they **cannot** reach any border.
+
+So in the final loop, we simply count every land cell (`1`) that is **not in the `visited` set**.
+
+---
+
+### ✅ Summary:
+- Use DFS from the borders to find land cells that are *not* enclaves.
+- Traverse the entire grid and count all remaining land cells that aren't visited.
+
+Time Complexity:
+- **O(m × n)**  
+  Each cell is visited at most once by DFS, and the final counting loop is also O(m × n).
+
+Space Complexity:
+- **O(m × n)** worst case  
+  If the entire grid is land, the `visited` set and DFS recursion stack can grow to O(m × n).
+"""
+
+
 class Solution:
     def numEnclaves(self, grid: List[List[int]]) -> int:
         M, N = len(grid), len(grid[0])
