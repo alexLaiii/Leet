@@ -1,0 +1,76 @@
+"""
+This DP problem can be solved using both 1D and 2D DP.  
+2D is easier to understand, while 1D uses the same logic but optimizes space.
+
+Problem:  
+Given an m × n grid, where a robot always starts at the top-left corner, and the target is the bottom-right corner,  
+find the number of unique paths the robot can take to reach the target.  
+The robot can only move right or down.
+
+Idea:  
+We use dynamic programming to store the number of ways to reach each cell.  
+Since the robot can only move right or down, the number of ways to reach a cell is always the sum of:
+  - the number of ways to reach the cell above it
+  - the number of ways to reach the cell to its left  
+So: `dp[i][j] = dp[i - 1][j] + dp[i][j - 1]`
+
+Implementation:
+- Create a 2D DP grid to store the number of paths to each cell.
+- Initialize the starting cell as 1.
+- The first row and first column are always 1 because there's only one way to reach those cells:
+    - First row: keep going right (Since if you go down, you cannot go back up to this row)
+    - First column: keep going down (Since if you go right, you cannot go left back to this column)
+- Fill the rest of the grid using the recurrence above.
+- The result will be in `dp[m - 1][n - 1]`.
+
+1D Optimization:  
+When calculating a new row, we only need:
+  - the previous value from the same row (left)
+  - the value from the previous row (top)  
+So we can use a single row and update it row by row:
+  - `dp = n_row` at the end of each row to reuse space
+
+Time Complexity:
+- O(m * n): Every cell is computed once
+
+Space Complexity:
+- 2D: O(m * n)
+- 1D: O(n), only storing one row at a time
+"""
+
+# 1D solution
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        # O(n) space
+        dp = [1 for i in range(n)]
+
+        for i in range(1, m):
+            n_row = [1 for i in range(n)]
+            for j in range(1, n):
+                n_row[j] = dp[j] + n_row[j - 1]
+            dp = n_row
+        return dp[-1]
+
+# 2D DP solution
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        dp = [[0 for x in range(n)] for i in range(m)]
+ 
+        for i in range(m):
+            dp[i][0] = 1
+        for j in range(n):
+            dp[0][j] = 1
+
+        for i in range(1, m):
+            for j in range(1, n):
+                # dp[i - 1][j] is the north, dp[i][j - 1] is the left
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1] 
+
+        return dp[m - 1][n - 1]
+
+
+
+                 
+
+        
+        
