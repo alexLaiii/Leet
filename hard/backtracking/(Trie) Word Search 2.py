@@ -125,10 +125,57 @@ class Solution:
 
         for i in range(M):
             for j in range(N):
-                if board[i][j] in root.children:
-                    dfs(i,j, root)
+                dfs(i,j, root)
                 if len(res) == len(words):
                     break
-          
         return res
- 
+           
+"""
+Solution 2:
+Idea is bascially the same, but here I implement word addWord is a TrieNode Class function, more compact.
+"""
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.isEnd = False
+    def addWord(self, word):
+        curr = self
+        for c in word:
+            if c not in curr.children:
+                curr.children[c] = TrieNode()
+            curr = curr.children[c]
+        curr.isEnd = True
+            
+
+class Solution:
+    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+        root = TrieNode()
+        for w in words:
+            root.addWord(w)
+        
+        M,N = len(board), len(board[0])
+        res = set()
+        visited = set()
+
+        directions = [[1,0], [-1, 0], [0,1], [0,-1]]
+        
+        def dfs(r,c, curr_n, word):
+            if r < 0 or c < 0 or r >= M or c >= N or (r,c) in visited or board[r][c] not in curr_n.children:
+                return 
+            curr_n = curr_n.children[board[r][c]]
+            word += board[r][c]
+            visited.add((r,c))
+            if curr_n.isEnd:
+                res.add(word)
+            
+            for dr,dc in directions:
+                dfs(r+dr, c+dc, curr_n, word)
+            visited.remove((r,c))
+        
+
+        for i in range(M):
+            for j in range(N):
+                dfs(i, j, root, "")
+                if len(res) == len(words):
+                    break
+        return list(res)
