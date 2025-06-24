@@ -8,6 +8,8 @@
         to ensure we only consider candidates at or after the current position,
         effectively avoiding permutations and ensuring uniqueness.
 
+        Note that this approach ensures we never go back to use earlier indices. which is a path already been check earlier.
+
         Time Complexity:
             O(2^t) — where t is the target value.
             Each number can be either included or not at each level, forming a binary decision tree.
