@@ -54,5 +54,57 @@ class Solution(object):
                         dp[curr_amount] = dp[curr_amount-coin] + 1
         
         return -1 if dp[-1] == amount + 1 else dp[-1]
+
+
+
+"""
+Problem: Coin Change
+
+Idea:
+We want to find the minimum number of coins needed to sum up to a given `amount`, using the available denominations in `coins`.
+
+This is a classic **1D Dynamic Programming** problem where we build up the solution from smaller subproblems.
+
+Implementation:
+- Define `dp[i]` as the minimum number of coins needed to make up amount `i`.
+- Initialize `dp[0] = 0` (base case: 0 coins needed to make amount 0).
+- Set all other values in `dp` to `float('inf')` initially, which represents that those amounts are currently unreachable.
+
+For each amount `i` from 1 to `amount`, try every coin `c` in `coins`:
+    - If `i - c >= 0`, that means we can use coin `c` to reach amount `i`.
+    - So we take `dp[i - c] + 1` (the min coins to make `i - c`, plus 1 coin `c`) and update `dp[i]` if it’s smaller.
+
+After filling the DP table, `dp[amount]` holds the answer.
+
+Return:
+- `dp[amount]` if it's not infinity.
+- Otherwise, return -1 if there's no combination of coins to make the amount.
+
+Time Complexity:
+- O(amount * len(coins))
+
+Space Complexity:
+- O(amount)
+
+Example:
+coins = [1,2,5], amount = 11
+=> Output: 3 (11 = 5 + 5 + 1)
+"""
+
+
+# same thing different style
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        
+        dp = [float("inf")] * (amount + 1)
+        dp[0] = 0
+        
+        for i in range(1, len(dp)):
+            for c in coins:
+                if i - c >= 0:
+                    dp[i] = min(dp[i], dp[i-c] + 1)
+        
+        return dp[-1] if dp[-1] != float("inf") else -1
+
                     
             
