@@ -2,6 +2,10 @@
 ❓ Why does sorting by end time guarantee the minimum number of intervals to remove?
 Because:
 Greedy by earliest end time always leaves the most room for future intervals.
+
+
+Time Complexity: O(nlogn) -> Sorting (nlogn) + travel through the intervals O(n)
+Space Complexity: O(1)
 """
 
 class Solution:
