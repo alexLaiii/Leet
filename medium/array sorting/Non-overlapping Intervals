@@ -1,13 +1,56 @@
 """
-❓ Why does sorting by end time guarantee the minimum number of intervals to remove?
+This problem belongs to the interval scheduling family, where the key idea is to detect **overlaps** using the condition: `previous_end > current_start`.
+
+### Idea:
+We want to **remove as few intervals as possible** so that the remaining intervals are non-overlapping. 
+To do that, our goal is to **maximize the number of non-overlapping intervals** we can keep.
+
+So, how do we make the best decision at each step?
+
+We use a **greedy strategy**: always **keep the interval that ends earliest**, because it frees up the most room for future intervals. 
+This minimizes the chance of overlapping with upcoming ones -> lead to **maximize the number of non-overlapping intervals** we can keep..
+
+That’s why we **sort the intervals by their end time**.
+
+#### Example:
+Suppose the input is: `[[1,6], [2,5], [8,9]]`
+
+After sorting by end time, it becomes:
+``[[2,5], [1,6], [8,9]]``
+
+Now process them one by one:
+- Start with `[2,5]`, keep it. Set `end = 5`. (We always keep the first one since it guranteen taken up the least space.)
+- Next is `[1,6]`: since `1 < 5`, it **overlaps**, so we **remove it**. (We don't update `end`, meaning we’re pretending `[2,5]` is still the active interval.)
+- Next is `[8,9]`: since `8 >= 5`, **no overlap**, keep it. Update `end = 9`. (We update `end`, meaning the active largest interval right now is `[8,9]`)
+
+So we removed one interval: `[1,6]`.
+
+Follow Up:
+### Why does the first interval is save to keep?
 Because:
-Greedy by earliest end time always leaves the most room for future intervals.
+> Since the intervals are sorted by their end time, the interval with the smallest end comes first.
+This interval takes up the least amount of timeline and is safest to keep, because it minimizes the chance of overlapping with any future intervals.
+
+Even if a later interval has a smaller start time, it won't interfere with this logic:
+- If it also has an earlier end, it would have appeared earlier due to sorting.
+- If it has a later end, it would appear later as one of the possible candidate to be removed.
+
+Therefore, this greedy approach implicitly prioritizes intervals that are least likely to block future placements, ensuring minimal removals.
 
 
-Time Complexity: O(nlogn) -> Sorting (nlogn) + travel through the intervals O(n)
-Space Complexity: O(1)
+### Why does sorting by end time guarantee minimal removals?
+
+Because:
+> **Greedily choosing intervals that end earliest always leaves the maximum possible space for future intervals**, allowing you to retain as many as possible.
+
+That’s the key idea behind this greedy algorithm.
+
+### Time and Space Complexity:
+- **Time**: O(n log n) — for sorting.
+- **Space**: O(1) — no extra space beyond counters.
 """
 
+# Solution If sorted by END
 class Solution:
     def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
         intervals.sort(key=lambda x:x[1])
@@ -25,3 +68,18 @@ class Solution:
                 # keeping it will increasing the end, so we have to change it.
                 currEnd = end
         return res
+
+# Solution If sortedd by START
+class Solution:
+    def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
+        intervals.sort(key = lambda x:x[0])
+        currEnd = intervals[0][1]
+        rmv = 0
+        for start, end in intervals[1:]:
+            if currEnd > start:
+                # Overlapped
+                rmv += 1
+                currEnd = min(currEnd, end)
+            else:
+                currEnd = end
+        return rmv
