@@ -118,4 +118,39 @@ class Solution:
             res.append(dfs(n1,n2, 1))
             
         return res
+
+
+###
+Same Idea: But cleaner variable names
+###
+class Solution:
+    def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
+        graph = defaultdict(list)
+        for i in range(len(equations)):
+            n1,n2 = equations[i]
+            v = values[i]
+            graph[n1].append((n2, v))
+            graph[n2].append((n1, 1/v))
+
+        def dfs(node, target, weight, visited):
+            if node == target:
+                return weight
+            if node in visited:
+                return -1.0
+            visited.add(node)
+            for next_node, next_w in graph[node]:
+                res = dfs(next_node, target, weight * next_w, visited)
+                if res != -1.0:
+                    return res
+            return -1.0
+        
+        results = []
+        for x,y in queries:
+            if x not in graph or y not in graph:
+                results.append(-1.0)
+                continue
+            
+            results.append(dfs(x,y, 1, set()))
+
+        return results
             
