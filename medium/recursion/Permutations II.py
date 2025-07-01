@@ -1,3 +1,28 @@
+
+
+# Count base approach
+class Solution:
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+        hash_nums = {}
+        for n in nums:
+            hash_nums[n] = 1 + hash_nums.get(n, 0)
+        res = []
+
+        def backtrack(path):
+            if len(path) == len(nums):
+                res.append(path.copy())
+                return
+            for num in hash_nums:
+                if hash_nums[num] == 0:
+                    continue
+                path.append(num)
+                hash_nums[num] -= 1
+                backtrack(path)
+                path.pop()
+                hash_nums[num] += 1
+        backtrack([])
+        return res
+
 class Solution:
     def permuteUnique(self, nums: List[int]) -> List[List[int]]:
         res = []
