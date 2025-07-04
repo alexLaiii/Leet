@@ -1,0 +1,9 @@
+🧠 Sliding Window Keyword Trick:
+
+If your goal is to **Count the number of valid subarrays/windows**:
+→ Try using `atMost(k) - atMost(k - 1)` to avoid missing overlapping windows.
+
+If your goal is to **find the best subarray/window** (e.g., shortest, longest, max/min), You want only one optimal window:
+→ Use standard sliding window with greedy shrinking.
+
+  
