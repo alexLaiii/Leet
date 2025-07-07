@@ -93,4 +93,34 @@ class Solution:
         
         return res
 
+"""
+Solution 2:
+BFS level traversal, instead using a distance put it as pair to track the level, instead do a level order BFS.
+That is, travel all the nodes that belongs to the same level in the same while loop.
+"""
+class Solution:
+    def shortestAlternatingPaths(self, n: int, redEdges: List[List[int]], blueEdges: List[List[int]]) -> List[int]:
+        adj_list = defaultdict(list)
+        # 0 for red, 1 for blue
+        for n1,n2 in redEdges:
+            adj_list[n1].append((n2, 0))
+        for n1,n2 in blueEdges:
+            adj_list[n1].append((n2, 1))
+
+        distance = 0
+        dq = deque([(0,0), (0,1)])
+        visited = set()
+        res = [-1 for i in range(n)]
+        while dq:
+            for i in range(len(dq)):
+                curr_n, curr_color = dq.popleft()
+                if (curr_n, curr_color) in visited:
+                    continue
+                visited.add((curr_n, curr_color))
+                res[curr_n] = distance if res[curr_n] == -1 else min(distance, res[curr_n])
+                for next_n, next_color in adj_list[curr_n]:
+                    if next_color == 1 - curr_color:
+                        dq.append((next_n, next_color))
+            distance += 1
+        return res
         
