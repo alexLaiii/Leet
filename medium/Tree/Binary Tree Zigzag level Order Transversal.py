@@ -1,27 +1,36 @@
 """
-ideaur:
-standard BFS use direction to mark travel from left or right 
- direction = 0 (left) direction = 1 (right)
-  level = [0] * len(dq)
-because we are doing bfs uhhh dee dee number of nodes in deque is predetermined so we can fix the size of the level array 
-                if direction == 0:
-                    level[i] = curr_node.val
-                else:
-                    level[-(i + 1)] = curr_node.val
-         from left, just append to the level in the normal way
-         from right, append from the back of the array
+idea:
+We perform a standard BFS (level-order traversal) with a twist: at each level, we alternate the traversal direction.
+- `direction = 0` means left-to-right
+- `direction = 1` means right-to-left
 
-since we want a correct length of level, only add to deque when what the node is not None.
-              direction = 1 - direction
-left right zig zag
+To handle the zigzag pattern efficiently, we preallocate the `level` array:
+    level = [0] * len(dq)
+This works because in BFS, the number of nodes at the current level is known in advance (i.e., len(dq)).
 
-time complexity: O(n)
-space complexity: O(n), deque: O(n)
-                  level + res: O(n)
+We then fill in the `level` array during traversal:
+    if direction == 0:
+        level[i] = curr_node.val  # left to right
+    else:
+        level[-(i + 1)] = curr_node.val  # right to left
+
+This avoids the need to reverse the array at the end of each level, making it more efficient.
+
+We only add `curr_node.left` and `curr_node.right` to the deque if they are not None,
+ensuring we don't insert nulls that would break the level count or processing logic.
+
+After processing each level, we flip the direction:
+    direction = 1 - direction
+to alternate between left-to-right and right-to-left for the next level.
+
+Time Complexity: O(n)
+- Each node is visited once.
+
+Space Complexity: O(n)
+- deque: stores up to n nodes in worst case.
+- level + res: both contribute O(n) space total.
 """
         
-
-
 
 class Solution:
     def zigzagLevelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
