@@ -1,7 +1,65 @@
 """
-Idea:
+This problem can be solved using Trie, Binary Search, or two pointers.
+Here, we use the Trie-based approach.
 
+Idea:
+We implement the Trie data structure to efficiently store all product strings and support fast prefix lookup. The main idea is:
+- Insert all products into the Trie.
+- For each prefix of the searchWord, traverse the Trie to find all words that start with that prefix.
+- Since a Trie naturally prunes invalid branches, we only explore relevant paths.
+- At the TrieNode where the last character of the prefix resides, we perform a DFS to collect up to 3 valid words.
+- Because we insert products in sorted order, the DFS will return words in lexicographical order without needing to sort during traversal.
+
+Implementation:
+- We define two classes: TrieNode and Trie.
+- TrieNode holds a dictionary of children and an optional word field to mark the end of a valid word.
+- We first sort the products list to ensure lexicographical order, then insert each word into the Trie using addWord().
+  Example:
+      for product in products:
+          my_trie.addWord(product)
+
+- Next, for each prefix of searchWord, we:
+    - Traverse one level deeper into the Trie using the current character.
+    - If the character exists, we move the pointer (curr) down and call getAll(curr, []) to collect suggestions.
+    - If the character doesn't exist, we know that no product matches the current prefix or any longer one, so we append [] for the current and all remaining characters.
+
+Details of getAll(self, startNode, suggestion):
+- We perform DFS to collect up to 3 valid suggestions starting from the given Trie node.
+- If the current node is marked as a word (i.e., startNode.word is not None), we append it to the suggestion list.
+- Then, we recursively visit each child node:
+    for e in startNode.children:
+        if len(suggestion) == 3:
+            break
+        self.getAll(startNode.children[e], suggestion)
+- The loop stops once we collect 3 suggestions.
+- If there are fewer than 3 words available, the DFS naturally terminates once all branches are explored.
+    - Since the last TrieNode from each branches is empty {}, "for e in startNode.children" will not start looping in the base case, hence no recursive call.
+- Since the Trie was built from a sorted list, the order of traversal respects lexicographical order.
+
+In short:
+- Trie insertion prunes irrelevant prefixes.
+- DFS guarantees correct suggestions as deep as possible. (So the correct alphebetic order suggestion would be found first)
+- Early stopping prevents unnecessary recursion.
+- The solution is efficient and avoids string comparison or sorting during query time.
+
+Time Complexity:
+- Let N be the number of products, L the maximum word length, and M the length of searchWord.
+- Trie construction: O(N * L)
+- For each prefix of length M:
+    - Trie traversal: O(M)
+    - DFS suggestion collection: O(3 * L)
+- Total: O(N * L + M * 3 * L) = effectively O(N * L + M)
+
+Space Complexity:
+- Trie storage: O(N * L) for all inserted words
+- Call stack for DFS: O(L) max depth, but only up to 3 paths explored per prefix
+- Output storage: O(M * 3) = O(M) for the final result list
+
+Overall: 
+Time → O(N * L + M)  
+Space → O(N * L)
 """
+
 
 class TrieNode:
     def __init__(self):
@@ -23,8 +81,9 @@ class Trie:
         if startNode.word:
             suggestion.append(startNode.word)
         for e in startNode.children:
-            if len(suggestion) < 3:
-                self.getAll(startNode.children[e], suggestion)
+            if len(suggestion) == 3:
+                break
+            self.getAll(startNode.children[e], suggestion)
         return suggestion
               
 class Solution:
@@ -44,3 +103,4 @@ class Solution:
                 curr = None
                 outerRes.append([])
         return outerRes
+
