@@ -1,0 +1,46 @@
+"""
+Idea:
+
+"""
+
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.word = None
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+    def addWord(self, word):
+        curr = self.root
+        for c in word:
+            if c not in curr.children:
+                curr.children[c] = TrieNode()
+            curr = curr.children[c]
+        curr.word = word
+
+    def getAll(self, startNode, suggestion):
+        if startNode.word:
+            suggestion.append(startNode.word)
+        for e in startNode.children:
+            if len(suggestion) < 3:
+                self.getAll(startNode.children[e], suggestion)
+        return suggestion
+              
+class Solution:
+    def suggestedProducts(self, products: List[str], searchWord: str) -> List[List[str]]:
+        products.sort()
+        my_trie = Trie()
+        for product in products:
+            my_trie.addWord(product)
+        
+        outerRes = []
+        curr = my_trie.root
+        for c in searchWord:
+            if curr and c in curr.children:
+                curr = curr.children[c]
+                outerRes.append(my_trie.getAll(curr, []))
+            else:
+                curr = None
+                outerRes.append([])
+        return outerRes
