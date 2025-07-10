@@ -1,21 +1,47 @@
 """
-There's two solution to this problem, 
-  - Recursion with prune, techincally still O(k^n)
-  - Bitmask binary Recursion, O(2^n)
+There are two main approaches to solve this problem:
+  - Backtracking with pruning (technically still O(k^n))
+  - Bitmask + DP (binary state compression), with complexity O(2^n)
 
-We can get the target sum of each subset by doing sum(nums) / k, so we can get this information before hand.
-(Recursion with prune)
-Idea: 
-Try to place the current number in nums to a bucket, if the sum in the bucket > the target, we skip this bucket and try to place in the next bucket.
-- If All the number are placed, "if idx == len(nums)", check the sum of each bucket to ensure it is indeed equals to the targetSum, If all of it is correct, return True.
-- If a number can't be place in any bucket -> return Fals.
-- After a number is placed in a bucket, recursive call the function and try to place the next number.
-- Since the current placing may lead to wrong path, we backtrack and try another path if this path cant continue ( a number can't be place in any bucket )
-- Therefore, we backtracking by subtract the placed number from the bucket, indicate that number is free again, and try to place other numbers.
+This solution uses backtracking with pruning.
 
+-----------------------------------------------------
+🧠 Idea:
+- First, calculate the target sum of each subset: target = sum(nums) / k.
+  - If sum(nums) is not divisible by k, return False immediately.
+
+- Sort nums in descending order to place large numbers first — this helps prune invalid paths early.
+
+- Use a recursive function to try placing each number into one of the k buckets:
+    - If placing nums[idx] into a bucket causes the sum to exceed the target, skip that bucket.
+    - If the number fits, add it to the bucket and recurse to place the next number.
+    - If the recursive call fails (dead-end), backtrack by removing the number from the bucket.
+    - Continue trying other buckets.
+
+- Base case:
+    - If all numbers are placed (i.e., idx == len(nums)), check that all buckets sum to exactly target.
+    - If so, return True; otherwise, return False.
+
+- Pruning tricks:
+    - Skip placing a number into a bucket if it is identical to the previous bucket's value (i.e., `bucket[i] == bucket[i-1]`), to avoid exploring symmetric states.
+    - If a number can’t be placed in any bucket, return False early.
+  Why this Pruning works: 
+    Logic:
+    If two buckets have the same current sum, placing nums[idx] into both is redundant — it'll lead to the same state.
+    Why?
+    Buckets are unordered. Swapping nums[x] between two identical buckets doesn’t change the total state — it's symmetric.
+    This pruning avoids exponential branching caused by symmetric permutations.
+
+-----------------------------------------------------
+🧮 Time Complexity:
+- Worst-case: O(k^n), where n = len(nums)
+- With pruning and early checks (like skipping over duplicate bucket states and big numbers first), performance improves significantly in practice.
+
+-----------------------------------------------------
+🗃️ Space Complexity:
+- O(k) for the bucket sum array
+- O(n) call stack for recursion
 """
-
-
 
 
 class Solution:
