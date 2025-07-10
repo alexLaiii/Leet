@@ -1,2 +1,2 @@
-Permutation: Not start required
+Permutation: No start required
 Combination: Try to start with a start index on passing
