@@ -7,7 +7,27 @@
 # - For each character in the string, we:
 # - Expand around it to count all odd-length palindromes
 # - Expand between it and the previous character to count even-length palindromes
+"""
+Why Expand Around Center Is Optimal for Palindrome Detection:
 
+- A palindrome is defined by symmetry around its center.
+  Therefore, it's more natural and efficient to expand outward from each center 
+  (either a character or a gap between characters) instead of checking substrings from both ends.
+
+- Expanding from the center allows early termination:
+  As soon as s[left] != s[right], expansion stops immediately — no need to scan to the middle.
+
+- In contrast, checking from the outer edges (i.e., brute-force substring validation) 
+  requires full traversal toward the center even if the first or second characters already break symmetry.
+
+- There are only 2n - 1 possible centers in a string of length n,
+  while the number of substrings is n(n + 1)/2.
+  This means center-expansion considers far fewer candidates than edge-based brute-force.
+
+- Overall, expanding from the center is both structure-aware and computationally efficient 
+  for finding or counting palindromic substrings.
+
+"""
 # Time Complexity: O(n^2)
 
 class Solution:
