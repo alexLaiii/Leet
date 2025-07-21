@@ -58,6 +58,29 @@ class Solution(object):
                     dp[i] = True
                     break
         return dp[-1]
+"""
+Solution 2:
+Top-down recursion with memories
+"""
+
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        wordDict_set = set(wordDict)
+        cache = {}
+        def dfs(word):
+            if not word:
+                return True
+            if word in cache:
+                return cache[word]
+            for i in range(1, len(word) + 1):
+                prefix = word[:i]
+                suffix = word[i:]
+                if (prefix in wordDict_set and suffix in wordDict_set) or (prefix in wordDict_set and dfs(suffix)):
+                    cache[word] = True
+                    return True
+            cache[word] = False
+            return False
+        return dfs(s)
         
 
         
