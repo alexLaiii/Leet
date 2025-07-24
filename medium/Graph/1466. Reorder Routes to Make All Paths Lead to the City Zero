@@ -1,0 +1,53 @@
+"""
+Approach:
+  ---------
+  We treat the tree as an undirected graph during traversal, but annotate each edge with a directional weight.
+
+  - During graph construction:
+      For each connection [u, v] (meaning u → v in the original input):
+          - Add (v, 1) to graph[u] to represent the original edge (needs reversal if we traverse it)
+          - Add (u, 0) to graph[v] to represent the reverse direction (already correct if used)
+
+  - During DFS traversal from node 0:
+      - We traverse in all directions (simulating an undirected graph), but use the directional weight:
+          - If we move along an edge with weight 1, it means we are following the original direction,
+            which points **away from node 0**, and we need to reverse it. So we add 1 to the result.
+          - If the edge has weight 0, it is already correctly oriented toward node 0 — no action needed.
+      - Visited set ensures we don't revisit nodes and overcount.
+
+  Why this works:
+  ---------------
+  - A tree guarantees no cycles and full connectivity, so DFS from node 0 will visit all nodes.
+  - We count only those edges that point away from the current node (original direction),
+    since they must be reversed to allow travel toward node 0.
+  - The idea that "opposite direction edges = weight 1" is misleading; we mark
+    the **original** direction as 1 during construction and evaluate reversals based
+    on **how we traverse the graph**, not how the edge looks statically.
+
+  Time Complexity: O(n)
+  Space Complexity: O(n)
+
+  Returns:
+      int: Minimum number of edge reversals required
+  """
+
+class Solution:
+    def minReorder(self, n: int, connections: List[List[int]]) -> int:
+        graph = defaultdict(list)
+
+        for n1,n2 in connections:
+            graph[n1].append((n2, 1))
+            graph[n2].append((n1, 0))   
+
+        visited = set()
+        def dfs(curr, res):
+            visited.add(curr)
+            for next_node, isExist in graph[curr]:
+                if next_node in visited:
+                    continue
+                res = dfs(next_node, res + isExist)
+            return res
+            
+            
+
+        return dfs(0, 0)
