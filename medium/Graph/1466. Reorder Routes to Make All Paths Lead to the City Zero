@@ -34,20 +34,17 @@ Approach:
 class Solution:
     def minReorder(self, n: int, connections: List[List[int]]) -> int:
         graph = defaultdict(list)
+        for n1, n2 in connections:
+            graph[n1].append((n2,1))
+            graph[n2].append((n1, 0))
 
-        for n1,n2 in connections:
-            graph[n1].append((n2, 1))
-            graph[n2].append((n1, 0))   
-
-        visited = set()
-        def dfs(curr, res):
-            visited.add(curr)
-            for next_node, isExist in graph[curr]:
+        def dfs(node, cost, visited):
+            visited.add(node)
+            for next_node, weight in graph[node]:
                 if next_node in visited:
                     continue
-                res = dfs(next_node, res + isExist)
-            return res
-            
-            
+                cost = dfs(next_node, cost + weight, visited)
+            return cost
 
-        return dfs(0, 0)
+
+        return dfs(0,0,set())
