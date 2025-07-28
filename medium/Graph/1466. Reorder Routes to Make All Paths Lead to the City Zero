@@ -48,3 +48,63 @@ class Solution:
 
 
         return dfs(0,0,set())
+### 
+BFS solution
+###
+
+"""
+Leetcode 1466 — Reorder Routes to Make All Paths Lead to the City Zero
+
+Problem Summary:
+You're given a directed tree with `n` cities (labeled 0 to n-1). 
+Each connection [a, b] means a road from city a -> b.
+Your goal is to find the minimum number of roads that need to be reversed
+so that **every city can reach city 0**.
+
+Approach (BFS, Edge Direction Encoding):
+- First, construct an undirected graph using an adjacency list.
+- For each original edge a -> b, we encode:
+    - (b, 1) in `graph[a]` to represent a forward (outbound) edge (needs reversal)
+    - (a, 0) in `graph[b]` to represent the same edge but from the other side
+      (i.e., a reverse edge — doesn't need reversal if we arrive at a from b)
+- Start BFS from city 0 (the target destination).
+- For each node visited, if an adjacent edge is "outbound" (w = 1),
+  that means it needs to be reversed to point to the root.
+- Accumulate the count of such edges.
+- Track visited cities to avoid revisiting.
+
+Time Complexity:
+- O(n), since we process each node and edge once.
+
+Space Complexity:
+- O(n), for the graph and visited set.
+
+Example:
+    Input: n = 6, connections = [[0,1],[1,3],[2,3],[4,0],[4,5]]
+    Output: 3 (edges [0->1], [1->3], and [4->5] need to be reversed)
+
+Returns:
+    int: Minimum number of edges that need to be reversed
+"""
+class Solution:
+    def minReorder(self, n: int, connections: List[List[int]]) -> int:
+
+        graph = defaultdict(list)
+        for n1, n2 in connections:
+            graph[n1].append((n2, 1))  # original edge (needs reversal)
+            graph[n2].append((n1, 0))  # reverse edge (already pointing to 0)
+
+        res = 0
+        dq = deque([0])
+        visited = set()
+
+        while dq:
+            curr_node = dq.popleft()
+            visited.add(curr_node)
+            for next_node, w in graph[curr_node]:
+                if next_node in visited:
+                    continue
+                res += w  # count if original direction needs reversal
+                dq.append(next_node)
+
+        return res
