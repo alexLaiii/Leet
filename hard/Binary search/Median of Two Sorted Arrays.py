@@ -46,3 +46,30 @@
     nums1 = [1, 2], nums2 = [3, 4]
     → Combined = [1, 2, 3, 4], Median = (2 + 3)/2 = 2.5
     """
+
+
+class Solution:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        k = (len(nums1) + len(nums2))// 2
+        # Always want ot bs on the smaller one
+        if len(nums1) > len(nums2):
+            nums1, nums2 = nums2, nums1
+        
+        l,r = -1, len(nums1) - 1
+        while l <= r:
+            mid = (l + r) // 2
+            j = k - (mid + 1)
+            f_left = nums1[mid] if mid >= 0 else float("-inf")
+            s_left = nums2[j-1] if j - 1 >= 0 else float("-inf")
+            f_right = nums1[mid + 1] if mid + 1 < len(nums1) else float("inf")
+            s_right = nums2[j] if j < len(nums2) else float("inf")
+
+            if f_left > s_right:
+                r = mid - 1
+            elif s_left > f_right:
+                l = mid + 1
+            else:
+                if (len(nums1) + len(nums2)) % 2 == 0:
+                    return (max(f_left, s_left) + min(s_right, f_right)) / 2
+                else:
+                    return min(s_right, f_right)
