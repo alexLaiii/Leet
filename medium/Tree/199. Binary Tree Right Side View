@@ -1,0 +1,53 @@
+  """
+  LeetCode 199 — Binary Tree Right Side View
+
+  Return the values of the nodes visible from the right side of a binary tree,
+  top to bottom.
+
+  Approach
+  --------
+  Breadth-first search (level-order). For each level, we:
+    1) Record the number of nodes currently in the queue `n` (this level's size).
+    2) Pop exactly `n` nodes, pushing their children (left then right) for the next level.
+    3) The last node popped in this level (i == n - 1) is the rightmost node; append its value.
+
+  Why `n = len(dq)` matters
+  -------------------------
+  We iterate `for i in range(n)` to strictly bound processing to the current level.
+  Using `range(len(dq))` would be incorrect because the queue grows as we append
+  children, causing nodes from the next level to be processed prematurely.
+
+  Correctness
+  -----------
+  Level-order traversal visits all nodes in a level before moving to the next.
+  Since we enqueue left then right, the last node we pop from a given level is
+  exactly the one visible from the right.
+
+  Complexity
+  ----------
+  Time:  O(N), visiting each node once.
+  Space: O(W), where W is the maximum width of the tree (queue size).
+
+  Edge Cases
+  ----------
+  - Empty tree → [].
+  """
+class Solution:
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        if not root:
+            return []
+        dq = deque([root])
+        res = []
+        while dq:
+            n = len(dq)
+            for i in range(len(dq)):
+                curr_node = dq.popleft()                
+                if curr_node.left:
+                    dq.append(curr_node.left) 
+                if curr_node.right:
+                    dq.append(curr_node.right)
+                if i == n - 1:
+                    res.append(curr_node.val)
+           
+        return res
+        
