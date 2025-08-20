@@ -1,3 +1,8 @@
+"""
+Extend each cell to a [3 * 3] cell to represent cut
+Then use dfs() to flood out all the cell that it can traveled to, and thats one region, just like 200. Number of Islands
+"""
+
 class Solution:
     def regionsBySlashes(self, grid: List[str]) -> int:
         N = len(grid)
