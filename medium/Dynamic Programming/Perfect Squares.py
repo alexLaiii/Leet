@@ -1,4 +1,7 @@
   """
+  IMPORTANT:
+  This problem is bascially coin change but you have to compute your own "COINS", If failed to solve it, think of coin change
+  
   Return the minimum number of perfect squares whose sum is n.  (LeetCode 279)
 
   Core idea (DP = unbounded coin change):
