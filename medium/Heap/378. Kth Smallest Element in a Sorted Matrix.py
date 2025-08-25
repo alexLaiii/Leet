@@ -1,4 +1,7 @@
   """
+  Note:
+  This problem is similar tp " 373. Find K Pairs with Smallest Sums "
+  
   Find the k-th smallest element in a row- and column-sorted matrix
   using a min-heap + BFS-style expansion.
 
