@@ -72,7 +72,7 @@ This implementation solves it directly with top-down DP instead.
 
 Returns
 -------
-Number of distinct '+'/'−' assignments achieving `target`.
+Number of distinct expressions that achieving `target`.
 """
 
 class Solution:
