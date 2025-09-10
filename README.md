@@ -1,1 +1,1 @@
-Just for my study purposes
+Just for me
