@@ -1,22 +1,23 @@
-  """
-  *** Hint: Heap queue structure ***
-  *** Hint2: 23. Merge k Sorted Lists ***
 
-  Core idea:
-    Maintain one pointer per list and a min-heap of those k current values.
-    The heap top gives the current minimum; a running variable tracks the
-    current maximum across the k picks. This forms a valid covering window
-    [min, max] at each step.
+"""
+*** Hint: Heap queue structure ***
+*** Hint2: 23. Merge k Sorted Lists ***
 
-  Why it works:
-    To possibly shrink the window, you must advance the list contributing
-    the current minimum (anything else keeps the same min and can’t help).
-    Replacing that min with its next element “slides” the window forward in
-    merged order; once a list is exhausted, no full cover remains, and the
-    best window seen is optimal.
+Core idea:
+  Maintain one pointer per list and a min-heap of those k current values.
+  The heap top gives the current minimum; a running variable tracks the
+  current maximum across the k picks. This forms a valid covering window
+  [min, max] at each step.
 
-  Complexity: O(N log k) time, O(k) space.
-  """
+Why it works:
+  To possibly shrink the window, you must advance the list contributing
+  the current minimum (anything else keeps the same min and can’t help).
+  Replacing that min with its next element “slides” the window forward in
+  merged order; once a list is exhausted, no full cover remains, and the
+  best window seen is optimal.
+
+Complexity: O(N log k) time, O(k) space.
+"""
 
 
 class Solution:
