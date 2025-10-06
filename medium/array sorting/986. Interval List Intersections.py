@@ -20,7 +20,31 @@
   Time:  O(m + n)
   Space: O(1) besides the output
   """
+"""
+Cleaner version
+"""
 
+class Solution:
+    def intervalIntersection(self, firstList: List[List[int]], secondList: List[List[int]]) -> List[List[int]]:
+        intersect = []
+        i , j = 0,0
+        mergedEnd = 0
+        while i < len(firstList) and j < len(secondList):
+            start = max(firstList[i][0], secondList[j][0])
+            end = min(firstList[i][1], secondList[j][1])
+            if end >= start:
+                intersect.append([start,end])
+            if firstList[i][1] > secondList[j][1]:
+                j += 1
+            else:
+                i += 1
+                
+        return intersect
+
+
+"""
+My original solution
+"""
 class Solution:
     def intervalIntersection(self, firstList: List[List[int]], secondList: List[List[int]]) -> List[List[int]]:
         if not firstList or not secondList:
@@ -64,26 +88,6 @@ class Solution:
                     prevMerge = nextCheck
         return intersect
 
-"""
-Cleaner version
-"""
-
-class Solution:
-    def intervalIntersection(self, firstList: List[List[int]], secondList: List[List[int]]) -> List[List[int]]:
-        intersect = []
-        i , j = 0,0
-        mergedEnd = 0
-        while i < len(firstList) and j < len(secondList):
-            start = max(firstList[i][0], secondList[j][0])
-            end = min(firstList[i][1], secondList[j][1])
-            if end >= start:
-                intersect.append([start,end])
-            if firstList[i][1] > secondList[j][1]:
-                j += 1
-            else:
-                i += 1
-                
-        return intersect
 
 
                 
