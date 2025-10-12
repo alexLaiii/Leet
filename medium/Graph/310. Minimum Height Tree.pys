@@ -1,0 +1,63 @@
+"""
+Claim as a medium, but the solution is very unintuitive and I suggest it is a HARD problem.
+
+Return all roots of Minimum Height Trees (MHTs) for an undirected tree.
+
+This implements the classic “leaf-peeling” (multi-source BFS) algorithm:
+- Build adjacency lists and degrees for the n-node tree.
+- Initialize a queue with all current leaves (degree == 1).
+- Repeatedly remove the entire current layer of leaves; when a neighbor’s
+  degree drops to 1, it becomes a new leaf and is queued for the next round.
+- Stop when at most two nodes remain; those remaining nodes are exactly the
+  center(s) of the tree and form the set of MHT roots.
+
+Why it works:
+In any tree, the roots that minimize height are the center(s)—the middle
+node(s) of any diameter. Removing all leaves shrinks the diameter from both
+ends by one each round, converging to the center(s). A tree has either 1 or
+2 centers, so the answer size is always 1 or 2 (except the n=1 edge case).
+
+Args:
+    n: Number of nodes labeled [0..n-1].
+    edges: List of undirected edges [u, v] forming a connected tree (|E|=n-1).
+
+Returns:
+    A list of 1 or 2 node labels that are valid MHT roots.
+
+Edge cases:
+    - n == 1: single node tree ⇒ [0].
+
+Complexity:
+    Time  : O(n) — each node/edge is processed O(1) times across layers.
+    Space : O(n) — adjacency list, degree array, and queue.
+"""
+
+class Solution:
+    def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
+        if n == 1:
+            return [0]
+        adj_list = defaultdict(list)
+        degree = [0] * n
+        dq = deque([])
+        for n1,n2 in edges:
+            adj_list[n1].append(n2)
+            adj_list[n2].append(n1)
+            degree[n1] += 1
+            degree[n2] += 1
+        for i in range(len(degree)):
+            if degree[i] == 1:
+                dq.append(i)
+        while n > 2:
+            for i in range(len(dq)):
+                rmv_nodes = dq.popleft()
+                for connect_nodes in adj_list[rmv_nodes]:
+                    degree[connect_nodes] -= 1
+                    if degree[connect_nodes] == 1:
+                        dq.append(connect_nodes)
+                n -= 1
+        
+        return list(dq)
+        
+        
+        
+        
