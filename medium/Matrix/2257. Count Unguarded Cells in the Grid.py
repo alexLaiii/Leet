@@ -27,7 +27,7 @@ class Solution:
             grid[r][c] = 1
 
         directions = [[-1,0], [1,0], [0,-1], [0,1]]
-        res = 0
+        seen = 0
 
         for r,c in guards:
             for dr, dc in directions:
@@ -42,8 +42,11 @@ class Solution:
                         grid[curr_r][curr_c] = 2
                         curr_r += dr
                         curr_c += dc
-                        res += 1
+                        seen += 1
         
-        return m*n - len(guards) - len(walls) - res
+        return m*n - len(guards) - len(walls) - seen
+
+                
+
 
                 
