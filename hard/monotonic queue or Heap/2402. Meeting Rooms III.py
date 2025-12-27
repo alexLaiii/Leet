@@ -57,12 +57,14 @@ class Solution:
             roomEndtime[earliestRoom] = earliestTime + (end - start)
 
         mostUsedRoom = 0
-        mostUsedCount = -1
         for i in range(n):
-            if usedCount[i] > mostUsedCount:
+            if usedCount[i] > usedCount[mostUsedRoom]:
                 mostUsedRoom = i
-                mostUsedCount = usedCount[i]
         return mostUsedRoom
+            
+
+        
+
             
 
         
