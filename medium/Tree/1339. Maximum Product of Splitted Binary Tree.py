@@ -1,29 +1,3 @@
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-class Solution:
-    def maxProduct(self, root: Optional[TreeNode]) -> int:
-        MOD = 10 ** 9 + 7
-    
-        self.maxproduct = float("-inf")
-        def dfs(node):
-            if not node:
-                return 0   
-            return node.val + dfs(node.left) + dfs(node.right)
-        self.treeSum = dfs(root)
-
-        def dfsFindSubTree(node):
-            if not node:
-                return 0 
-            subTreeSum = node.val + dfsFindSubTree(node.right) + dfsFindSubTree(node.left)
-            self.maxproduct = max(self.maxproduct, subTreeSum * (self.treeSum - subTreeSum))
-            return subTreeSum
-        dfsFindSubTree(root)
-        return self.maxproduct % MOD
-            
 """
 Compute the maximum product obtainable by splitting a binary tree into two subtrees
 by removing exactly one edge.
@@ -51,3 +25,31 @@ Complexity:
 Notes:
 - The maximum product can be large, so the result is returned modulo 1e9+7 as required.
 """
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def maxProduct(self, root: Optional[TreeNode]) -> int:
+        MOD = 10 ** 9 + 7
+    
+        self.maxproduct = float("-inf")
+        def dfs(node):
+            if not node:
+                return 0   
+            return node.val + dfs(node.left) + dfs(node.right)
+        self.treeSum = dfs(root)
+
+        def dfsFindSubTree(node):
+            if not node:
+                return 0 
+            subTreeSum = node.val + dfsFindSubTree(node.right) + dfsFindSubTree(node.left)
+            self.maxproduct = max(self.maxproduct, subTreeSum * (self.treeSum - subTreeSum))
+            return subTreeSum
+        dfsFindSubTree(root)
+        return self.maxproduct % MOD
+            
+
