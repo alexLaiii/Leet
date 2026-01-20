@@ -1,0 +1,40 @@
+  """
+  For each prime number p in nums, find the smallest non-negative integer i
+  such that the bitwise OR of i and i + 1 equals p, i.e.,
+      i | (i + 1) == p.
+
+  The method uses a brute-force search: for each p, it iterates i from 0
+  up to p − 1 and checks the condition. Since the constraint on p is small
+  (2 ≤ p ≤ 1000), this approach is efficient enough.
+
+  If such an integer i exists, it is appended to the result list; otherwise,
+  -1 is appended to indicate that no valid value exists for that p.
+
+  Time Complexity:
+      O(sum(nums)), acceptable under the given constraints.
+
+  Space Complexity:
+      O(n), where n is the length of nums.
+
+  Args:
+      nums (List[int]): A list of prime integers.
+
+  Returns:
+      List[int]: A list where each element is the minimum i satisfying
+                 i | (i + 1) == nums[i], or -1 if no such i exists.
+  """
+
+class Solution:
+    def minBitwiseArray(self, nums: List[int]) -> List[int]:
+        res = []
+        for p in nums:
+            i = 0
+            while i < p:
+                if (i | i + 1) == p:
+                    res.append(i)
+                    break
+                i += 1
+            if i == p:
+                res.append(-1)
+
+        return res
