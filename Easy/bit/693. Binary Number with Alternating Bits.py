@@ -1,4 +1,37 @@
-  """
+"""
+Trick solution
+
+Return True if the binary representation of n consists of alternating bits
+(no two adjacent bits are equal), otherwise return False.
+
+Approach:
+- Right shift n by one position to align each bit with its neighbor.
+- XOR the shifted value with the original number. For a number with
+  alternating bits, this produces a binary number of all 1s.
+- A number consisting entirely of 1s satisfies the property:
+      x & (x + 1) == 0
+  which is used to verify the pattern efficiently.
+
+Example:
+- n = 5 (101) -> alternating -> True
+- n = 7 (111) -> not alternating -> False
+
+Time Complexity:
+O(1)
+
+Space Complexity:
+O(1)
+"""
+
+class Solution:
+    def hasAlternatingBits(self, n: int) -> bool:
+        new_n = n ^ (n >> 1)
+        return new_n & (new_n + 1) == 0
+
+            
+
+
+"""
   Return True if the binary representation of n has alternating bits
   (no two adjacent bits are the same), otherwise return False.
 
